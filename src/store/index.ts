@@ -1,7 +1,7 @@
 import { createStore, Store, useStore as vuexUseStore } from "vuex";
 import IPlayer from "@/interfaces/IPlayer";
 import {InjectionKey} from "vue";
-import { CLICK_FOR_MONEY, MONEY_PER_SECOND, UPDATE_MAIN_MPS } from "./tipo-mutacoes";
+import { BUY_WORKER, CLICK_FOR_MONEY, MONEY_PER_SECOND, UPDATE_MAIN_MPS } from "./tipo-mutacoes";
 import IWorker from "@/interfaces/IWorker";
 
 export interface Estado {
@@ -12,7 +12,7 @@ export const key: InjectionKey<Store<Estado>> = Symbol()
 export const store = createStore<Estado>({
     state: {
         player:{
-            money: 900,
+            money: 0,
             mps: 0,
             clickingPower: 1
         },
@@ -20,26 +20,29 @@ export const store = createStore<Estado>({
           {
             name:'Silly',
             description:'Fully lad that makes silly things to earn money???',
-            price: 10,
+            price: 15,
+            basePrice: 15,
             quantity: 0,
             image: '../assets/silly.jpg',
-            mps: 1
+            mps: 0.5
           },
           {
             name:'Winston',
             description:'Weird and cute, Winston likes to give you money.',
-            price: 120,
+            price: 100,
+            basePrice: 100,
             quantity: 0,
             image: '../assets/winston.png',
-            mps: 25
+            mps: 15
           },
           {
             name:'Ceo of silly cats',
             description:'He has a silly proposal to make!',
-            price: 780,
+            price: 500,
+            basePrice: 500,
             quantity: 0,
             image: '../assets/ceo.jpg',
-            mps: 90
+            mps: 55
           }
         ]
     },
@@ -56,6 +59,15 @@ export const store = createStore<Estado>({
     },
     [CLICK_FOR_MONEY](state){
       state.player.money += state.player.clickingPower
+    },
+    [BUY_WORKER](state, selectedWorker: string){
+      const index = state.workers.findIndex(worker => worker.name == selectedWorker)
+      const buyed = state.workers[index]
+      if(state.player.money >= buyed.price){
+        state.player.money -= buyed.price
+        buyed.quantity += 1
+        buyed.price = buyed.basePrice * 1.15 ** buyed.quantity
+      }
     }
   }
 })

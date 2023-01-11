@@ -3,19 +3,21 @@
         <Market/>
         <div class="middle">
           <div class="header">
-            <h1>{{money}}</h1>
+            <h1>{{money.toFixed(0)}}</h1>
           
-            <h2>{{mps}}/s</h2>
+            <h2>{{mps.toFixed(1)}}/s</h2>
           </div>
-          <img @click="clickForMoney" class="clicker" src="@/assets/maxwell.jpg"/>
+          <Maxwell/>
         </div>
+        <Upgrades/>
     </div>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue';
 import Market from './components/Market.vue'
-
+import Maxwell from './components/Maxwell.vue'
+import Upgrades from './components/Upgrades.vue'
 import { Store, useStore } from 'vuex';
 import { Estado } from '@/store/index'
 import { CLICK_FOR_MONEY, MONEY_PER_SECOND, UPDATE_MAIN_MPS } from './store/tipo-mutacoes';
@@ -23,7 +25,8 @@ export default defineComponent({
     name: 'App',
     components: {
         Market,
-
+        Maxwell,
+        Upgrades
     },
     setup(){
         const store = useStore()
@@ -49,9 +52,7 @@ export default defineComponent({
             store.commit(UPDATE_MAIN_MPS)
           }.bind(store),1000)
         },
-        clickForMoney(){
-          this.store.commit(CLICK_FOR_MONEY)
-        }
+
     },
     mounted(){
       
@@ -73,26 +74,26 @@ export default defineComponent({
 	font: inherit;
 	vertical-align: baseline;
 }
-.clicker{
-  width: 40vw;
-  height: auto;
-}
 .middle{
   display: flex;
   flex-direction: column;
   align-items: center;
+  width:52vw
 }
 .header{
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 76vw;
+  width: auto;
 }
 #app {
 
 }
 .container{
   display: flex;
+}
+html{
+  overflow-y: hidden;
 }
 </style>

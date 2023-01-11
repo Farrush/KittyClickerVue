@@ -1,5 +1,5 @@
 <template>
-    <div class="card">
+    <div class="card" @click="onClickWorker">
         <img :src="image"/>
         <div class="card-body">
             <h1>{{name}}</h1>
@@ -15,6 +15,7 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
     name: 'WorkerCard',
+    emits:['workerPurchaseAttempt'],
     props:{
         name:{
             type: String
@@ -37,14 +38,16 @@ export default defineComponent({
 
     },
     methods:{
-
+        onClickWorker(){
+            this.$emit("workerPurchaseAttempt", this.name)
+        }
     }
 })
 </script>
 <style scoped>
 .card{
     display: flex;
-    width: 21vw;
+    width: 24vw;
     height: 14vh;
     align-items: center;
     padding:10px 0;
